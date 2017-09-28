@@ -1,0 +1,6 @@
+framework module Pods_aniListTests {
+  umbrella header "Pods-aniListTests-umbrella.h"
+
+  export *
+  module * { export * }
+}

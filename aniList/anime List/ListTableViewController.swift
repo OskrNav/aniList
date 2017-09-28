@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SwiftSpinner
 
 class ListTableViewController: UITableViewController {
     var listAnime : Array<Anime> = []
@@ -46,23 +47,42 @@ class ListTableViewController: UITableViewController {
         let cell = tableView.dequeueReusableCell(withIdentifier: "listCell", for: indexPath) as! ListTableViewCell
         let key = Array(self.categories.keys)[indexPath.section]
         cell.listCategory = self.categories[key]!
+        cell.delegate = self
         return cell
     }
 
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 140
     }
+    
+    // MARK : Navigation
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "animeDetailSegue"{
+            let controller = segue.destination as! ListDetailTableViewController
+            controller.anime = sender as? Anime
+            
+        }
+    }
 
 }
 
+// MARK : anime List Protocol
+extension ListTableViewController : animeListDelegate{
+    func showDetail(_ selected: Anime) {
+        self.performSegue(withIdentifier: "animeDetailSegue", sender: selected)
+    }
+}
 // MARK : Http Request
 extension ListTableViewController {
     func getInformation(){
         let url = "browse/anime"
+        SwiftSpinner.show("Loading Information")
         Getdata(instasnce: self, url: url, callback: response)
     }
     
     func response(data: NSDictionary){
+        
         let items = data["data"] as? NSArray
         for item in items!{
             listAnime.append(Anime(item as! NSDictionary))
@@ -76,6 +96,7 @@ extension ListTableViewController {
             }
             return categories
         }
+        SwiftSpinner.hide()
         self.tableView.reloadData()
     }
 }

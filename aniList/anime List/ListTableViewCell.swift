@@ -11,6 +11,7 @@ import AlamofireImage
 
 class ListTableViewCell: UITableViewCell {
      @IBOutlet weak var collectionView: UICollectionView!
+    var delegate : animeListDelegate?
     var listCategory : Array<Anime> = []  {
         didSet {
             collectionView.reloadData()
@@ -29,6 +30,11 @@ extension ListTableViewCell : UICollectionViewDataSource {
         let data = listCategory[indexPath.row]
         cell.imageView.af_setImage(withURL: URL(string: data.image_url_med!)!)
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let data = listCategory[indexPath.row]
+        delegate?.showDetail(data)
     }
     
 }

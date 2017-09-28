@@ -29,12 +29,21 @@ struct Anime {
     var image_url_lge  : String?
     var image_url_banner : String?
     var updated_at : Int?
+    var airing_status : String?
+    var total_episodes:Int?
     
     init(_ data:NSDictionary){
         if let id = data["id"] as? Int {
             self.id = id
         }
         
+        if let airing_status = data["airing_status"] as? String{
+            self.airing_status = airing_status
+        }
+        
+        if let total_episodes = data["total_episodes"] as? Int{
+            self.total_episodes = total_episodes
+        }
         if let series_type = data["series_type"] as? String {
             self.series_type = series_type
         }
